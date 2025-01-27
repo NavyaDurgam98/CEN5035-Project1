@@ -1,15 +1,38 @@
 package main
 
-import "fmt"
+import (
+	"os"
 
-func smm(a, b int) int {
-	return a + b
-}
+	routes "SkillArcade/routes"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
+	port := os.Getenv("PORT")
 
-	var a = 5
-	var b = 6
-	c := smm(a, b)
-	fmt.Println("welcome to the Go world !! ", c)
+	if port == "" {
+		port = "8000"
+	}
+
+	router := gin.New
+	router.Use(gin.Logger())
+
+	routes.AuthRoutes(router)
+	routes.UserRoutes(router)
+
+	//post - signup
+	//post signin
+
+	router.POST("/api-1", func(c *gin.Context) {
+		c.json(200, gin.H{"sucess": "Access Granted for api-1"})
+
+	})
+
+	router.GET("/api-2", func(c *gin.Context) {
+		c.json(200, gin.H{"sucess": "Access Granted for api-2"})
+
+	})
+
+	router.Run(":" + port)
 }
